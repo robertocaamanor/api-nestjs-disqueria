@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Param } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -39,5 +39,24 @@ export class ArtistasController {
   @ApiResponse({ status: 200, description: 'Lista de artistas.', type: [ArtistaDto] })
   findAll(): Promise<Artista[]> {
     return this.artistasService.findAll();
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Obtener un artista por ID' })
+  @ApiResponse({ status: 200, description: 'El artista ha sido encontrado.', type: ArtistaDto })
+  async findById(@Param('id') id: number): Promise<ArtistaDto> {
+    const artista = await this.artistasService.findById(id);
+    return {
+      ...artista,
+      pais: {
+        id: artista.pais.id,
+        nombre: artista.pais.nombre,
+      },
+      nacimiento: artista.nacimiento.toISOString(),
+      fecha_creacion: artista.fecha_creacion.toISOString(),
+      fecha_modificacion: artista.fecha_modificacion.toISOString(),
+    };
   }
 }

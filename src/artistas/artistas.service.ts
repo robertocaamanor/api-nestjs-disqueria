@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Artista } from './artista.entity';
@@ -36,6 +36,15 @@ export class ArtistasService {
   // Método para obtener todos los artistas
   async findAll(): Promise<Artista[]> {
     return this.artistaRepository.find({ relations: ['pais'] });  // Cargar la relación con la entidad Pais
+  }
+
+  // Método para obtener un artista por ID
+  async findById(id: number): Promise<Artista> {
+    const artista = await this.artistaRepository.findOne({ where: { id }, relations: ['pais'] });
+    if (!artista) {
+      throw new NotFoundException(`Artista con ID ${id} no encontrado`);
+    }
+    return artista;
   }
 
   // Verifica si las tablas existen y las crea si no es así
