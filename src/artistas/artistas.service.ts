@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Artista } from './artista.entity';
 import { Pais } from '../paises/pais.entity';  // Asegúrate de que la entidad Pais esté importada
-import { CreateArtistaDto } from './create-artista.dto';
+import { CreateArtistaDto } from './dto/create-artista.dto';
+import { UpdateArtistaDto } from './dto/update-artista.dto';  // Importa el DTO para actualizar
 
 @Injectable()
 export class ArtistasService {
@@ -45,6 +46,34 @@ export class ArtistasService {
       throw new NotFoundException(`Artista con ID ${id} no encontrado`);
     }
     return artista;
+  }
+
+  // Método para actualizar un artista
+  async update(id: number, updateArtistaDto: UpdateArtistaDto): Promise<Artista> {
+    const artista = await this.artistaRepository.findOne({ where: { id }, relations: ['pais'] });
+    if (!artista) {
+      throw new NotFoundException(`Artista con ID ${id} no encontrado`);
+    }
+
+    if (updateArtistaDto.paisId) {
+      const pais = await this.paisRepository.findOneBy({ id: updateArtistaDto.paisId });
+      if (!pais) {
+        throw new Error(`Pais con ID ${updateArtistaDto.paisId} no encontrado`);
+      }
+      artista.pais = pais;
+    }
+
+    Object.assign(artista, updateArtistaDto);
+    return this.artistaRepository.save(artista);
+  }
+
+  // Método para eliminar un artista
+  async delete(id: number): Promise<void> {
+    const artista = await this.artistaRepository.findOne({ where: { id } });
+    if (!artista) {
+      throw new NotFoundException(`Artista con ID ${id} no encontrado`);
+    }
+    await this.artistaRepository.remove(artista);
   }
 
   // Verifica si las tablas existen y las crea si no es así
