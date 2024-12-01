@@ -64,6 +64,7 @@ export class ArtistasService {
     }
 
     Object.assign(artista, updateArtistaDto);
+    artista.fecha_modificacion = new Date();  // Actualiza la fecha de modificación
     return this.artistaRepository.save(artista);
   }
 
