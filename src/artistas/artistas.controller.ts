@@ -1,5 +1,10 @@
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { ArtistasService } from './artistas.service';
 import { Artista } from './artista.entity';
 import { CreateArtistaDto } from './dto/create-artista.dto';
@@ -15,9 +20,16 @@ export class ArtistasController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Crear un nuevo artista' })
-  @ApiResponse({ status: 201, description: 'El artista ha sido creado.', type: ArtistaDto })
+  @ApiResponse({
+    status: 201,
+    description: 'El artista ha sido creado.',
+    type: ArtistaDto,
+  })
   async create(@Body() createArtistaDto: CreateArtistaDto): Promise<Artista> {
-    return this.artistasService.create(createArtistaDto, createArtistaDto.paisId);
+    return this.artistasService.create(
+      createArtistaDto,
+      createArtistaDto.paisId,
+    );
   }
 
   @Get()
