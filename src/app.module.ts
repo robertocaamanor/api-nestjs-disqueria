@@ -10,11 +10,11 @@ import { AuthModule } from './auth/auth.module'; // Importa el módulo de autent
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.POSTGRES_HOST || 'localhost',
-      port: parseInt(process.env.POSTGRES_PORT, 10) || 5432,
-      username: process.env.POSTGRES_USER || 'admin',
-      password: process.env.POSTGRES_PASSWORD || 'admin123',
-      database: process.env.POSTGRES_DB || 'disqueria',
+      host: 'localhost',
+      port: 5432,
+      username: 'user',
+      password: 'password',
+      database: 'transacciones_db',
       entities: [Artista, Pais],
       synchronize: true,
     }),
