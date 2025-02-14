@@ -25,7 +25,7 @@ export class ArtistasController {
         id: artista.pais.id,
         nombre: artista.pais.nombre,
       },
-      nacimiento: artista.nacimiento.toISOString(),
+      nacimiento: new Date(artista.nacimiento).toISOString(),
       fecha_creacion: artista.fecha_creacion.toISOString(),
       fecha_modificacion: artista.fecha_modificacion.toISOString(),
     };
