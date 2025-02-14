@@ -76,42 +76,4 @@ export class ArtistasService {
     }
     await this.artistaRepository.remove(artista);
   }
-
-  // Verifica si las tablas existen y las crea si no es así
-  async ensureTablesExist(): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-
-    // Verificar si la tabla 'artistas' existe
-    const artistasTableExists = await queryRunner.hasTable('artistas');
-    if (!artistasTableExists) {
-      console.log('La tabla "artistas" no existe. Creándola...');
-      await queryRunner.query(`
-        CREATE TABLE artistas (
-          id SERIAL PRIMARY KEY,
-          nombre VARCHAR(100) NOT NULL,
-          nacimiento DATE NOT NULL,
-          anio_debut INT NOT NULL,
-          fecha_creacion TIMESTAMP DEFAULT now(),
-          fecha_modificacion TIMESTAMP DEFAULT now(),
-          paisId INT NOT NULL,
-          FOREIGN KEY (paisId) REFERENCES paises(id)
-        )
-      `);
-    }
-
-    // Verificar si la tabla 'paises' existe
-    const paisesTableExists = await queryRunner.hasTable('paises');
-    if (!paisesTableExists) {
-      console.log('La tabla "paises" no existe. Creándola...');
-      await queryRunner.query(`
-        CREATE TABLE paises (
-          id SERIAL PRIMARY KEY,
-          nombre VARCHAR(100) NOT NULL
-        )
-      `);
-    }
-
-    await queryRunner.release();
-  }
 }
