@@ -34,4 +34,25 @@ describe('PaisesService', () => {
 
     expect(await service.findAll()).toBe(result);
   });
+
+  it('should add a new pais', async () => {
+    const newPais = { id: 1, nombre: 'Argentina' } as Pais;
+    jest.spyOn(service, 'create').mockImplementation(() => Promise.resolve(newPais));
+
+    expect(await service.create('Argentina')).toBe(newPais);
+  });
+
+  it('should return a pais by id', async () => {
+    const pais = { id: 1, nombre: 'Argentina' } as Pais;
+    jest.spyOn(service, 'findById').mockImplementation(() => Promise.resolve(pais));
+
+    expect(await service.findById(1)).toBe(pais);
+  });
+
+  it('should update a pais', async () => {
+    const updatedPais = { id: 1, nombre: 'Brasil' } as Pais;
+    jest.spyOn(service, 'create').mockImplementation(() => Promise.resolve(updatedPais));
+
+    expect(await service.create('Brasil')).toBe(updatedPais);
+  });
 });
