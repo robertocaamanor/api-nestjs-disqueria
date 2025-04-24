@@ -43,4 +43,38 @@ export class DiscosService {
     }
     return disco;
   }
+
+  async update(id: number, updateDiscoDto: Partial<CreateDiscoDto>): Promise<Disco> {
+    const disco = await this.discoRepository.findOne({ where: { id }, relations: ['pais', 'artista'] });
+    if (!disco) {
+      throw new NotFoundException(`Disco con ID ${id} no encontrado`);
+    }
+
+    if (updateDiscoDto.paisId) {
+      const pais = await this.paisRepository.findOneBy({ id: updateDiscoDto.paisId });
+      if (!pais) {
+        throw new NotFoundException(`Pais con ID ${updateDiscoDto.paisId} no encontrado`);
+      }
+      disco.pais = pais;
+    }
+
+    if (updateDiscoDto.artistaId) {
+      const artista = await this.artistaRepository.findOneBy({ id: updateDiscoDto.artistaId });
+      if (!artista) {
+        throw new NotFoundException(`Artista con ID ${updateDiscoDto.artistaId} no encontrado`);
+      }
+      disco.artista = artista;
+    }
+
+    Object.assign(disco, updateDiscoDto);
+    return this.discoRepository.save(disco);
+  }
+
+  async delete(id: number): Promise<void> {
+    const disco = await this.discoRepository.findOne({ where: { id } });
+    if (!disco) {
+      throw new NotFoundException(`Disco con ID ${id} no encontrado`);
+    }
+    await this.discoRepository.remove(disco);
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { DiscosService } from './discos.service';
 import { CreateDiscoDto } from './dto/create-disco.dto';
@@ -36,5 +36,25 @@ export class DiscosController {
   @ApiResponse({ status: 404, description: 'Disco no encontrado.' })
   async findById(@Param('id') id: number): Promise<Disco> {
     return this.discosService.findById(id);
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Actualizar un disco' })
+  @ApiResponse({ status: 200, description: 'El disco ha sido actualizado.', type: Disco })
+  @ApiResponse({ status: 404, description: 'Disco no encontrado.' })
+  async update(@Param('id') id: number, @Body() updateDiscoDto: Partial<CreateDiscoDto>): Promise<Disco> {
+    return this.discosService.update(id, updateDiscoDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Eliminar un disco' })
+  @ApiResponse({ status: 200, description: 'El disco ha sido eliminado.' })
+  @ApiResponse({ status: 404, description: 'Disco no encontrado.' })
+  async delete(@Param('id') id: number): Promise<void> {
+    return this.discosService.delete(id);
   }
 }
