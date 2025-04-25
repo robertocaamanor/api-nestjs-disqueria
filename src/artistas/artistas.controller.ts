@@ -83,8 +83,8 @@ export class ArtistasController {
         nombre: artista.pais.nombre,
       },
       nacimiento: new Date(artista.nacimiento).toISOString(),
-      fecha_creacion: artista.fecha_creacion.toISOString(),
-      fecha_modificacion: artista.fecha_modificacion.toISOString(),
+      fecha_creacion: new Date(artista.fecha_creacion).toISOString(),
+      fecha_modificacion: new Date(artista.fecha_modificacion).toISOString(),
     };
   }
 

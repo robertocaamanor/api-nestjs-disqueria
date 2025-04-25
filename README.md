@@ -10,7 +10,7 @@ El servicio permite crear, actualizar, eliminar y obtener información sobre art
 
 1. Clona el repositorio:
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
+    git clone https://github.com/robertocaamanor/api-nestjs-disqueria
     ```
 2. Navega al directorio del proyecto:
     ```bash
